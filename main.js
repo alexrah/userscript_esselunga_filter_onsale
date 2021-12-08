@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Esselunga Filtra Offerte
 // @namespace    http://tampermonkey.net/
-// @version      4.1
+// @version      4.2
 // @description  aggiungi 2 bottoni per filtrare le offerte
 // @author       Alessandro Stoppato
 // @match        https://www.esselungaacasa.it/*
@@ -34,7 +34,7 @@ class Esselunga{
             this.sortForm = this.container.querySelector('#sortProductSet');
             this.sortForm.addEventListener('change',this.loadAllProducts.bind(this));
             this.scrollHandle = 0;
-            this.filterActive = true;
+            this.filterActive = false;
             this.createButton(this.createFilter.bind(this),'Offerte');
             this.createButton(this.resetFilter.bind(this),'X');
         },1000);
