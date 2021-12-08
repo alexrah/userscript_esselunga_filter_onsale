@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Esselunga Filtra Offerte
 // @namespace    http://tampermonkey.net/
-// @version      3.1
+// @version      4.1
 // @description  aggiungi 2 bottoni per filtrare le offerte
 // @author       Alessandro Stoppato
 // @match        https://www.esselungaacasa.it/*
@@ -31,8 +31,10 @@ class Esselunga{
                 return;
             }
             console.log('%cEsselunga filter: Starting','color: green');
-            this.sortForm = document.getElementById('sortProductSet');
+            this.sortForm = this.container.querySelector('#sortProductSet');
+            this.sortForm.addEventListener('change',this.loadAllProducts.bind(this));
             this.scrollHandle = 0;
+            this.filterActive = true;
             this.createButton(this.createFilter.bind(this),'Offerte');
             this.createButton(this.resetFilter.bind(this),'X');
         },1000);
@@ -40,29 +42,27 @@ class Esselunga{
 
     createFilter(){
         const self = this;
-
         if(!self.sortForm){
             alert('no search results here')
             return;
         }
-
-        self.sortForm.addEventListener('change',self.loadAllProducts.bind(self));
-
-        self.sortList();
-
-
+        self.filterActive = true;
+        self.sortForm.querySelector("[label='Prezzo crescente']").setAttribute('selected','selected');
+        self.fireChange();
     }
 
     loadAllProducts() {
         const self = this;
+
+        if(!self.filterActive) return;
 
         console.log('loadAllProducts');
 
         let prev_scroll = 0
 
         self.scrollHandle = setInterval(() => {
-            console.log('prev: ', prev_scroll);
-            console.log('current: ', document.body.scrollHeight);
+            // console.log('prev: ', prev_scroll);
+            // console.log('current: ', document.body.scrollHeight);
             if (prev_scroll === document.body.scrollHeight) {
                 self.stopScroll()
                 self.filterOnSale()
@@ -91,13 +91,13 @@ class Esselunga{
     }
 
     createButton(action,label = ''){
-    const buttonItem = document.createElement('button');
+        const buttonItem = document.createElement('button');
 
-    buttonItem.textContent = label.length > 0?label:action.name;
-    buttonItem.addEventListener('click',()=>{
-        action();
-    });
-    this.container.appendChild(buttonItem);
+        buttonItem.textContent = label.length > 0?label:action.name;
+        buttonItem.addEventListener('click',()=>{
+            action();
+        });
+        this.container.appendChild(buttonItem);
     }
 
     resetFilter(){
@@ -105,18 +105,16 @@ class Esselunga{
         self.sortForm.querySelectorAll('option').forEach(option => {
             option.removeAttribute('selected');
         });
-        self.sortForm.removeEventListener('change',self.loadAllProducts);
-        self.sortList();
+        self.filterActive = false;
+        self.fireChange();
 
 
     }
 
-    sortList(){
+    fireChange(){
         const self = this;
-        self.sortForm.querySelector("[label='Prezzo crescente']").setAttribute('selected','selected');
-        const event = new Event('change');
         setTimeout(()=>{
-            self.sortForm.dispatchEvent(event);
+            self.sortForm.dispatchEvent(new Event('change'));
         },1000)
     }
 
