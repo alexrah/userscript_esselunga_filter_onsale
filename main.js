@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Esselunga Filtra Offerte
 // @namespace    http://tampermonkey.net/
-// @version      3.0
+// @version      3.1
 // @description  aggiungi 2 bottoni per filtrare le offerte
 // @author       Alessandro Stoppato
 // @match        https://www.esselungaacasa.it/*
@@ -23,13 +23,19 @@
 class Esselunga{
 
     constructor(){
-
-        this.container = document.querySelector('.n-prodotti');
-        this.sortForm = document.getElementById('sortProductSet');
-        this.scrollHandle = 0;
-        this.createButton(this.createFilter.bind(this),'Offerte');
-        this.createButton(this.resetFilter.bind(this),'X');
-
+        console.log('%cEsselunga filter: Initializing','color: yellow');
+        setTimeout(()=>{
+            this.container = document.querySelector('.n-prodotti');
+            if(this.container === null) {
+                console.log('%cEsselunga filter: Not a product page, exiting...','color: purple');
+                return;
+            }
+            console.log('%cEsselunga filter: Starting','color: green');
+            this.sortForm = document.getElementById('sortProductSet');
+            this.scrollHandle = 0;
+            this.createButton(this.createFilter.bind(this),'Offerte');
+            this.createButton(this.resetFilter.bind(this),'X');
+        },1000);
     }
 
     createFilter(){
