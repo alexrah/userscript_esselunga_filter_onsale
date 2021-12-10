@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Esselunga Filtra Offerte
 // @namespace    http://tampermonkey.net/
-// @version      4.2
+// @version      4.3
 // @description  aggiungi 2 bottoni per filtrare le offerte
 // @author       Alessandro Stoppato
 // @match        https://www.esselungaacasa.it/*
 // @icon         https://www.google.com/s2/favicons?domain=esselungaacasa.it
 // @grant        none
 // @noframes
+// @downloadURL https://raw.githubusercontent.com/alexrah/userscript_esselunga_filter_onsale/master/main.js
+// @updateURL https://raw.githubusercontent.com/alexrah/userscript_esselunga_filter_onsale/master/main.js
 // ==/UserScript==
 
 // choose sort by price
